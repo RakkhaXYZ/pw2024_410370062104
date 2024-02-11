@@ -15,6 +15,7 @@ $produk = query("SELECT * FROM produk");
 
 <body>
   <h1 class="text-center">Daftar Produk Toko</h1>
+  <a href="tambah.php" class="btn btn-info p-2 mb-3">Insert Produk</a>
   <table class="table" cellpadiing="10" cellspacing="">
     <thead>
       <tr class="text-center">

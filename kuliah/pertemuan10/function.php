@@ -25,3 +25,24 @@ function query($query)
   }
   return $rows;
 }
+
+
+// MEMBUAT FUNGSI TAMBAH PRODUK
+function tambah($data)
+{
+  $nama_produk = htmlspecialchars($data['nama_produk']);
+  $harga_produk = $data['harga_produk'];
+  $detail_produk = htmlspecialchars($data['detail_produk']);
+  $namagambar = $_FILES['gambar']['name'];
+  $lokasigambar = $_FILES['gambar']['tmp_name'];
+  $gambarfiks = date('YmdHis') . $namagambar;
+  move_uploaded_file($lokasigambar, "img/$gambarfiks");
+
+  $conn = koneksi();
+  $query = "INSERT INTO produk VALUES (null,'$gambarfiks', '$nama_produk', '$harga_produk', '$detail_produk')";
+  mysqli_query($conn, $query);
+
+  echo mysqli_error($conn);
+  // akan mengembalikan nilai jikalau ada perubahan dalam database entah itu, ditambah, dihapus, atau di edit
+  return mysqli_affected_rows($conn);
+}

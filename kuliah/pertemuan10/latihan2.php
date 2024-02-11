@@ -14,7 +14,10 @@ $produk = query("SELECT * FROM produk");
 </head>
 
 <body>
+
   <h1 class="text-center">Daftar Produk Toko</h1>
+
+
   <table class="table" cellpadiing="10" cellspacing="">
     <thead>
       <tr class="text-center">
