@@ -126,3 +126,112 @@ function cari($keyword)
 
   return $rows;
 }
+
+
+
+// membuat fungsi login 
+
+function login($data)
+{
+
+  $email = htmlspecialchars($data['email']);
+  $password = htmlspecialchars($data['password']);
+  $conn = koneksi();
+
+  if ($user = query("SELECT * FROM admin WHERE email='$email'")) {
+    if (password_verify($password, $user["password"])) {
+
+      $_SESSION['login'] = $user;
+      header("Location: index.php");
+      exit;
+    }
+  }
+
+  return [
+    'error' => true,
+    'pesan' => 'email dan password salah'
+  ];
+}
+
+
+
+
+// Membuat fungsi registrasi 
+
+function registrasi($data)
+{
+  $conn = koneksi();
+  $nama = htmlspecialchars($data["nama"]);
+  $email = htmlspecialchars($data["email"]);
+  $username = strtolower(stripcslashes($data["username"]));
+  $password = mysqli_real_escape_string($conn, $data["password"]);
+  $password2 = mysqli_real_escape_string($conn, $data["password2"]);
+
+  // jika form pendaftaran kosong 
+  if (empty($nama) || empty($email) || empty($username) || empty($password) || empty($password2)) {
+    echo "
+    <script> 
+    alert('Form Pendaftaran Tidak Boleh Kosong'); 
+    location='registrasi.php';
+    
+    </script>
+
+    
+    ";
+
+    return false;
+  }
+
+  // jika password dan passoword2 tidak sesuai
+  if ($password != $password2) {
+    echo "
+    <script> 
+    alert('konfirmasi Password Tidak Sesuai'); 
+    location='registrasi.php';
+    
+    </script>
+
+    
+    ";
+
+    return false;
+  }
+
+  // jika username email sudah ada tidak boleh daftar
+  if (query("SELECT * FROM admin WHERE email='$email'")) {
+    echo "
+    <script> 
+    alert('email Sudah Terdaftar'); 
+    location='registrasi.php';
+    
+    </script>
+
+    
+    ";
+
+    return false;
+  }
+
+  // jika password < 4 
+  if (strlen($password) < 4) {
+    echo "
+    <script> 
+    alert('password Tidak Boleh Kurang dari 4'); 
+    location='registrasi.php';
+    
+    </script>
+
+    
+    ";
+
+    return false;
+  }
+
+  $password = password_hash($password, PASSWORD_DEFAULT);
+
+  $query = "INSERT INTO admin VALUES(null, '$nama', '$email', '$username', '$password')";
+
+  mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+  return mysqli_affected_rows($conn);
+}

@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['login'])) {
+  header("Location: login.php");
+  exit;
+}
+
 require 'function.php';
 
 $produk = query("SELECT * FROM produk");
@@ -30,8 +37,10 @@ if (isset($_POST['cari'])) {
 </head>
 
 <body>
+  <p style="margin-left: 20px; padding-top: 20px;"> Hallo <b><?= $_SESSION['login']['nama']; ?></b> Selamat Datang</p>
   <h1 class="text-center">Daftar Produk Toko</h1>
   <a href="tambah.php" class="btn btn-info p-2 mb-3">Insert Produk</a>
+  <a href="logout.php" class="btn btn-danger mb-3" style="margin-left: 75rem;">Logout</a>
   <!-- fitul pencarian  -->
   <div class="container">
     <div class="row justify-content-center">
